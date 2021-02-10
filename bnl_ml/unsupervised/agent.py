@@ -18,7 +18,8 @@ class DirectoryAgent:
         header=0,
         file_ordering=None,
         file_limit=None,
-        figsize=None
+        figsize=None,
+        static_plot=True
     ):
         """
         Class for building trained model and classifying a directory.
@@ -38,16 +39,16 @@ class DirectoryAgent:
             Size two tuple for bounding the Xs to a region of interest
         header: int
             Number of header lines in file
-        training_output_dir: pathlike
+        output_dir: pathlike
             Output directory of training containing checkpoints for loading
-        path_to_model: pathlike
-            path to model to load in full (not presently implemented)
         file_ordering: function
             Function for sorting file paths as key argument in sorted
         file_limit: int
             Maximum number of files to consider
         figsize: tuple
             Two integer tuple for matplotlib figsize. Keep in mind all plots appear in a row.
+        static_plot : bool
+            Use of a static plot will attempt to display a _repr_png_ (ideal for jupyter notebooks).
         """
 
         self.dir = Path(data_dir).expanduser()
@@ -64,12 +65,12 @@ class DirectoryAgent:
         self.x_lim = x_lim
         self.header = header
         self.fig = plt.figure(figsize=figsize)
+        self.static_plot = static_plot
 
-        # TODO: Elegantly understand if I'm in a GUI or in ipython inline
-        try:
-            self.fig.canvas.manager.show()
-        except:
+        if self.static_plot:
             display.display(self.fig)
+        else:
+            self.fig.canvas.manager.show()
 
         if file_ordering is None:
             self.file_ordering = lambda x: x
@@ -111,6 +112,8 @@ class DirectoryAgent:
             normalize=True,
         )
 
+        # nuke everything
+        self.fig.clf()
         axes = self.fig.subplots(1, self.n_components + 2)
         example_plot(
             sub_X,
@@ -124,11 +127,13 @@ class DirectoryAgent:
             summary_fig=True,
         )
 
-        # TODO: Elegantly understand if I'm in a GUI or in ipython inline
         self.fig.canvas.draw_idle()
         self.fig.canvas.flush_events()
-        display.clear_output(wait=True)
-        display.display(self.fig)
+        if self.static_plot:
+            display.clear_output(wait=True)
+            display.display(self.fig)
+        else:
+            self.fig.canvas.manager.show()
 
     def spin(self, sleep_delay=60, verbose=False, timeout=0):
         """

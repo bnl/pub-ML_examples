@@ -164,6 +164,7 @@ def example_plot(
             ax = waterfall(ax, xs, ys, alpha, color=color, offset=offset)
         else:
             ax.set_visible = False
+        ax.set_title(f"Component {i}")
 
     if summary_fig:
         if sax is None:
@@ -177,11 +178,13 @@ def example_plot(
                 color=cmap(norm(i)),
                 label=f"Component {i + 1}",
             )
+        sax.set_title("Component Weights")
 
     if components is not None:
         if comax is None:
             comfig, comax = plt.subplots(figsize=(6, 6))
         for i in range(components.shape[0]):
             comax.plot(xs[0, :], components[i, :] + i, color=cmap(norm(i)))
+        comax.set_title("Stacked Components")
 
     return
