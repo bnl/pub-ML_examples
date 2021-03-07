@@ -4,6 +4,7 @@
 import pandas as pd 
 import glob
 from extract_features import get_features_single_datum
+from pathlib import Path
 # import random
 
 
@@ -13,7 +14,7 @@ def process_files(path, save_file_name = 'CSX_data.csv'):
 
     Parameters
     ----------
-    path : string
+    path : Path
         location of the raw hdf5 files.
     save_file_name : string, optional
         name of the file to save the data frame. The default is 'CSX_data.csv'.
@@ -26,7 +27,7 @@ def process_files(path, save_file_name = 'CSX_data.csv'):
     """
     
     df = [] 
-    files = glob.glob(path+'*.h5')     
+    files = list(path.glob('*.h5'))    
     for file in files:
     
         d = pd.read_hdf(file, key = 'scan')
