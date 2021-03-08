@@ -3,7 +3,7 @@
 
 import pandas as pd 
 import glob
-from extract_features import get_features_single_datum
+from bnl_ml.anomaly.extract_features import get_features_single_datum
 from pathlib import Path
 # import random
 
