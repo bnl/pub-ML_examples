@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import pandas as pd 
+import pandas as pd
 import glob
 from bnl_ml.anomaly.extract_features import get_features_single_datum
 from pathlib import Path
+
 # import random
 
 
-def process_files(path, save_file_name = 'CSX_data.csv'):
+def process_files(path, save_file_name="CSX_data.csv"):
     """
     Reads raw data, generate features, constract a pandas DataFrame and saves it as csv file
 
@@ -25,21 +26,16 @@ def process_files(path, save_file_name = 'CSX_data.csv'):
         processed data.
 
     """
-    
-    df = [] 
-    files = list(path.glob('*.h5'))    
+
+    df = []
+    files = list(path.glob("*.h5"))
     for file in files:
-    
-        d = pd.read_hdf(file, key = 'scan')
+
+        d = pd.read_hdf(file, key="scan")
         features = get_features_single_datum(d)
         df.append(features)
-    
-    data_frame = pd.DataFrame(df)    
-    data_frame.to_csv(save_file_name)  
-    print(f'data is processed and saved in {save_file_name}')
-    return data_frame
-            
-        
 
-        
-    
+    data_frame = pd.DataFrame(df)
+    data_frame.to_csv(save_file_name)
+    print(f"data is processed and saved in {save_file_name}")
+    return data_frame
