@@ -1,174 +1,196 @@
-from pathlib import Path
+from bnl_ml.unsupervised.nmf import decomposition
+from bnl_ml.utils.transforms import default_transform_factory
+from bnl_ml.utils.plotting import independent_waterfall, refresh_figure
+from bnl_ml.utils.maths import min_max_normalize
 import numpy as np
-from time import sleep, time
-import matplotlib.pyplot as plt
-from bnl_ml.unsupervised.nmf import decomposition, example_plot
-from IPython import display
+from matplotlib.pyplot import figure
+import matplotlib as mpl
 
 
-class DirectoryAgent:
+class NMFCompanion:
     def __init__(
         self,
-        data_dir,
         n_components,
         *,
-        data_spec=None,
-        x_lim=None,
-        output_dir=None,
-        header=0,
-        file_ordering=None,
-        file_limit=None,
-        figsize=None,
-        static_plot=True
+        x_linspace,
+        coordinate_transform=None,
+        normalize=True,
+        fig=None,
+        cmap="tab10",
     ):
         """
-        Class for building trained model and classifying a directory.
-        Classification can be accomplished on the fly or once using the spin() method.
-
+        Base class for NMF companion agent.
         Parameters
         ----------
-        data_dir: pathlike
-            Directory containing data to be classified
-        n_components:  int
+        n_components: int
             Number of components for NMF
-        data_spec: basestring
-            String specification for glob() method in searching data_dir
-            Default behavior is to include all files. If writing temporary files, it is important to include
-            final file spec such as '*.xy'.
-        x_lim:  tuple
-            Size two tuple for bounding the Xs to a region of interest
-        header: int
-            Number of header lines in file
-        output_dir: pathlike
-            Output directory of training containing checkpoints for loading
-        file_ordering: function
-            Function for sorting file paths as key argument in sorted
-        file_limit: int
-            Maximum number of files to consider
-        figsize: tuple
-            Two integer tuple for matplotlib figsize. Keep in mind all plots appear in a row.
-        static_plot : bool
-            Use of a static plot will attempt to display a _repr_png_ (ideal for jupyter notebooks).
-        """
+        x_linspace: array
+            x space for measurement plotting
+        coordinate_transform: Callable
+            Optional transformation for independent variables in tell.
+            Useful for converting "scientific" space coordinates to less interpretable or reduced
+            "beamline" space coordinates.
+        normalize: bool
+            Normalize data in decomposition
+        fig: Figure
+        cmap: str
+            Matplotlib colormap
 
-        self.dir = Path(data_dir).expanduser()
-        self.n_components = n_components
-        if data_spec is None:
-            self.path_spec = "*"
-        else:
-            self.path_spec = data_spec
-        self.output_dir = output_dir
-        self.paths = []
-        self.Ys = []
-        self.Xs = []
-        self.limit = file_limit
-        self.x_lim = x_lim
-        self.header = header
-        self.fig = plt.figure(figsize=figsize)
-        self.static_plot = static_plot
-
-        if self.static_plot:
-            display.display(self.fig)
-        else:
-            self.fig.canvas.manager.show()
-
-        if file_ordering is None:
-            self.file_ordering = lambda x: x
-
-    def __len__(self):
-        return len(self.paths)
-
-    def path_list(self):
-        return list(self.dir.glob(self.path_spec))
-
-    def load_file(self, paths):
-        xs = []
-        ys = []
-        paths = sorted(paths)
-        for idx, path in enumerate(paths):
-            if not (self.limit is None) and idx >= self.limit:
-                break
-            _x, _y = np.loadtxt(path, comments="#", skiprows=self.header).T
-            xs.append(_x)
-            ys.append(_y)
-        return xs, ys
-
-    def update_plot(self):
-        if len(self) < 2:
-            return
-        idxs = [
-            x
-            for x, y in sorted(
-                enumerate(self.paths), key=lambda x: self.file_ordering(x[1])
-            )
-        ]
-        Xs = np.array(self.Xs)
-        Ys = np.array(self.Ys)
-        sub_X, sub_Y, alphas, components = decomposition(
-            Xs,
-            Ys,
-            q_range=self.x_lim,
-            n_components=self.n_components,
-            normalize=True,
-        )
-
-        # nuke everything
-        self.fig.clf()
-        axes = self.fig.subplots(1, self.n_components + 2)
-        example_plot(
-            sub_X,
-            sub_Y,
-            alphas,
-            axes=axes[:-1],
-            sax=axes[-2],
-            components=components,
-            comax=axes[-1],
-            alt_ordinate=np.array(idxs),
-            summary_fig=True,
-        )
-
-        self.fig.canvas.draw_idle()
-        self.fig.canvas.flush_events()
-        if self.static_plot:
-            display.clear_output(wait=True)
-            display.display(self.fig)
-        else:
-            self.fig.canvas.manager.show()
-
-    def spin(self, sleep_delay=60, verbose=False, timeout=0):
-        """
-        Starts the spin to read new files and append their classifications to the output and internal dictionary
-        If a single pass of the data_directory is required, use a short or negative timeout time.
-        This can be run as a multiprocessing.Process target with a Manager to retain the output list if being run dynamically.
-
-        Parameters
-        ----------
-        sleep_delay: float
-            number of seconds to wait before checking directory for new files
-        verbose: bool
-            Print classifications to screen
-        timeout: float
-            Time to wait before stop spinning. Default is infinite spin. If a single pass is required, use a negative value.
 
         Returns
         -------
-        self.classifications:
-            dictionary of file basenames and classifications
 
         """
-        start_time = time()
+        self.n_components = n_components
+        self.linspace = x_linspace
+        self.independent = None
+        self.dependent_components = None  # NMF Components
+        self.dependent_weights = None  # NMF Weights
+        self.dependent = None  # Raw Data
+        if coordinate_transform is None:
+            self.coordinate_transform = default_transform_factory()
+        else:
+            self.coordinate_transform = coordinate_transform
+        self.normalize = normalize
+        if fig is None:
+            self.fig = figure(tight_layout=True)
+        else:
+            self.fig = fig
+        axes = self.fig.subplots(2, 2)
+        self.component_ax = axes[0, 0]
+        self.weight_ax = axes[0, 1]
+        self.loss_ax = axes[1, 0]
+        self.residual_ax = axes[1, 1]
+        self.plot_order = list(range(n_components))  # Order for plotting
+        self.cmap = mpl.cm.get_cmap(cmap)
+        self.norm = mpl.colors.Normalize(vmin=0, vmax=n_components)
 
-        while True:
-            if len(self.path_list()) > len(self):
-                self.fig.clf()
-                for path in self.path_list():
-                    if path.name not in self.paths:
-                        self.paths.append(path.name)
-                        xs, ys = self.load_file([path])
-                        self.Xs.extend(xs)
-                        self.Ys.extend(ys)
-            self.update_plot()
-            if timeout and time() - start_time > timeout:
-                break
-            sleep(sleep_delay)
-        return np.array(self.Xs), np.array(self.Ys)
+    def update_decomposition(self):
+        _, _, self.dependent_weights, self.dependent_components = decomposition(
+            np.zeros_like(
+                self.dependent
+            ),  # This is normally for Q tracking but irrelevant for the whole data range.
+            self.dependent,
+            n_components=self.n_components,
+        )
+
+    def tell(self, x, y):
+        """
+        Tell the NMF about something new
+        Parameters
+        ----------
+        x: These are the interesting parameters
+        y: This should be the I(Q) shape (1, n_datapoints)
+
+        Returns
+        -------
+        """
+        ys = np.reshape(y, (1, -1))
+        xs = np.reshape(x, (1, -1))
+        self.tell_many(xs, ys)
+
+    def tell_many(self, xs, ys):
+        """
+        Tell the NMF about many new things
+        Parameters
+        ----------
+        xs: These are the interesting parameters, they get converted to  space via a transform
+        ys: list, arr
+            This should be a list length m of the Q/I(Q) shape (n, 2)
+
+        Returns
+        -------
+
+        """
+        new_independents = list()
+        for i in range(xs.shape[0]):
+            new_independents.append(self.coordinate_transform.forward(*xs[i, :]))
+        if self.normalize:
+            new_dependents = min_max_normalize(np.array(ys))
+        else:
+            new_dependents = np.array(ys)
+        if self.independent is None:
+            self.independent = np.array(new_independents)
+            self.dependent = new_dependents
+        else:
+            self.independent = np.vstack([self.independent, new_independents])
+            self.dependent = np.vstack([self.dependent, new_dependents])
+
+    def update_plot_order(self):
+        """
+        Order by proxy center of mass of class in plot regime.
+        Makes the plots feel like a progression not random.
+        """
+        self.plot_order = np.argsort(np.argmax(self.dependent_weights, axis=0))
+
+    def update_weights_plot(self):
+        self.weight_ax.cla()
+        for i in range(self.dependent_weights.shape[1]):
+            self.weight_ax.plot(
+                self.independent,
+                self.dependent_weights[:, self.plot_order[i]],
+                color=self.cmap(self.norm(i)),
+                label=f"Component {i + 1}",
+            )
+        self.weight_ax.set_xlim([np.min(self.independent), np.max(self.independent)])
+        self.weight_ax.set_xlabel("Independent Variable")
+        self.weight_ax.set_ylabel("Weight")
+
+    def update_loss_plot(self):
+        self.loss_ax.cla()
+        WH = np.matmul(self.dependent_weights, self.dependent_components)
+        loss = np.mean((WH - self.dependent) ** 2, axis=1)
+        self.loss_ax.plot(self.independent, loss, "k")
+        self.loss_ax.set_xlim([np.min(self.independent), np.max(self.independent)])
+        self.loss_ax.set_xlabel("Independent Variable")
+        self.loss_ax.set_ylabel("Relative Error")
+        self.loss_ax.set_yticks([])
+
+    def update_component_plot(self):
+        self.component_ax.cla()
+        prev_max = 0
+        for i in range(self.dependent_components.shape[0]):
+            self.component_ax.plot(
+                self.linspace,
+                self.dependent_components[self.plot_order[i], :] + prev_max,
+                color=self.cmap(self.norm(i)),
+            )
+            prev_max += np.max(self.dependent_components[self.plot_order[i], :])
+        self.component_ax.set_xlabel(r"Q [$\AA^{-1}$]")
+        self.component_ax.set_ylabel("Stacked Intensity [Arb.]")
+        self.component_ax.set_yticks([])
+
+    def update_residual_plot(self):
+        self.residual_ax.cla()
+        residuals = (
+            np.matmul(self.dependent_weights, self.dependent_components)
+            - self.dependent
+        )
+        alpha = min_max_normalize(np.mean(residuals ** 2, axis=1))
+        independent_waterfall(
+            self.residual_ax, self.independent, self.linspace, residuals, alphas=alpha
+        )
+        self.residual_ax.set_xlabel(r"Q [$\AA^{-1}$]")
+        self.residual_ax.set_ylabel("Independent Var")
+
+    def ask(self):
+        """Ask the agent for some advice"""
+        raise NotImplementedError
+
+    def report(self, **kwargs):
+        """Allow the agent to summarize observations"""
+        self.update_decomposition()
+        self.update_plot_order()
+        self.update_weights_plot()
+        self.update_component_plot()
+        self.update_loss_plot()
+        self.update_residual_plot()
+
+        # Polish the rest off
+        refresh_figure(self.fig)
+
+    def __len__(self):
+        if self.dependent is None:
+            return 0
+        else:
+            return self.dependent.shape[0]

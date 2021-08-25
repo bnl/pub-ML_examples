@@ -36,6 +36,8 @@ def decomposition(
         Subsampled I used for NMF
     alphas : array
         Resultant weights from NMF
+    components: array
+        Resultant components from NMF
 
     """
 
