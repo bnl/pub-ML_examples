@@ -17,7 +17,7 @@ As with all things at a user facility, each model is trained or set-up according
 What is consistent across all AI agents, is their final communication paradigm.
 The agent loads and stores the model and/or necessary data, and has at minimum the following methods.
 
-* ``tell`` : tell the agent about some data
+* ``tell`` : tell the agent about some new data
 * ``report`` : construct a report (message, visualization, etc.) about the data
 * ``ask`` : ask the agent what to do next (for more see  `bluesky-adaptive <https://blueskyproject.io/bluesky-adaptive/>`_)
 
