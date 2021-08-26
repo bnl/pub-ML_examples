@@ -30,16 +30,30 @@ In the case study presented, the independent variables are temperature measureme
 Each call to ``report`` updates the decomposition using the full dataset, and updates the plots in the visualization.
 
 
-the NMF companion agent is wrapped in a filesystem watcher, ``DirectoryAgent``, which monitors a directory periodically.
+The NMF companion agent is wrapped in a filesystem watcher, ``DirectoryAgent``, which monitors a directory periodically.
 If there is new data in the target directory, the ``DirectoryAgent`` tells the NMF companion about the new data,
 and triggers a new ``report``.
 
+The construction of these objects, training, and visualization are all contained in the `run_unsupervised file <example_scripts/run_unsupervised.py>`_
+and mirrored in the `corresponding notebook <example_scripts/run_unsupervised.ipynb>`_.
 
 Anomaly detection
 *****************
 
 Supervised learning (Failure Classification)
 ********************************************
+The classifications of failures involves training the models entirely offline.
+This allows for robust model selection and specific deployment.
+A suite of models from scikit-learn are trained and tested, with the most promising model chosen to deploy.
+Since the models are lightweight, we re-train them at each instantiation during deployment with the most current dataset.
+For deep learning models, it would be appropriate to save and version the weights of a model, can construct the model at
+instantiation and load the weights.
+
+The training can be found at `run_supervised.py <example_scripts/run_supervised.py>`_ with example deployment
+infrastructure at `deploy_supervised.py <example_scripts/deploy_supervised.py>`_.
+How this is implemented at the BMM beamline can be found concisely
+`here <https://github.com/NSLS-II-BMM/profile_collection/blob/master/startup/BMM/xafs.py#L1167-L1169>`_,
+where a wrapper agent does pointwise evaluation on UIDs of a document stream, using the ``ClassificationAgent``'s ``tell``--``report`` interface.
 
 
 System Requirements
