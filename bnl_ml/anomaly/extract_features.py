@@ -120,15 +120,16 @@ def get_features_single_datum(d):
 
     """
     features = {}
+    
 
     features["roi"] = d["roi_name"]
     features["target"] = d["classification_label"]
+    
     for key in d.keys():
 
         if key in {
             "intensity_ts",
             "std_ts",
-            "intensity_ts",
             "com_x_ts",
             "com_y_ts",
             "sigma_x_ts",
