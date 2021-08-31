@@ -125,7 +125,7 @@ class BMMDataEvaluation:
             when not None, used to specify fluorescence or transmission (for a data set that has both)
         """
         self.agent.tell(uid, self.extract_data(uid, mode))
-        self.agent.report()
+        return self.agent.report()
 
     def rationalize_mu(self, en, mu):
         """Return energy and mu on a "rationalized" grid of equally spaced points.  See slef.GRIDSIZE"""
