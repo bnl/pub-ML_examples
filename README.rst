@@ -8,7 +8,21 @@ Overview
 
 Abstract
 ********
-Placeholder
+Imaging, scattering, and spectroscopy are fundamental in understanding and discovering new functional materials.
+Contemporary innovations in automation and experimental techniques have led to these measurements being performed much
+faster and with higher resolution, thus producing vast amounts of data for analysis.
+These innovations are particularly pronounced at user facilities and synchrotron light sources.
+Machine learning (ML) methods are regularly developed to process and interpret large datasets in real-time
+with measurements.
+However, there remain conceptual barriers to entry for the facility general user community,
+whom often lack expertise in ML, and technical barriers for deploying ML models.
+Herein, we demonstrate a variety of archetypal ML models for on-the-fly analysis at multiple beamlines at the
+National Synchrotron Light Source II (NSLS-II).
+We describe these examples instructively, with a focus on integrating the models into existing experimental workflows,
+such that the reader can easily include their own ML techniques into experiments at
+NSLS-II or facilities with a common infrastructure.
+The framework presented here shows how with little effort, diverse ML models operate in conjunction with feedback loops
+via integration into the existing Bluesky Suite for experimental orchestration and data management.
 
 
 Explanation of Examples
@@ -77,11 +91,16 @@ OS Requirements
 ---------------
 This package has been tested exclusively on Linux operating systems.
 
+- RHEL 8.3
 - Ubuntu 18.04
 - PopOS 20.04
 
 Python dependencies
 -------------------
+- numpy
+- matplotlib
+- scikit-learn
+- ipython
 
 Getting Started
 ===============
