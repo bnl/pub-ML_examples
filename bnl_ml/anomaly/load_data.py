@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import pandas as pd
-import glob
 from bnl_ml.anomaly.extract_features import get_features_single_datum
 from pathlib import Path
 
@@ -11,7 +10,7 @@ from pathlib import Path
 
 def process_files(path, save_file_name="CSX_data.csv"):
     """
-    Reads raw data, generate features, constract a pandas DataFrame and saves it as csv file
+    Reads raw data, generate features, construct a pandas DataFrame and saves it as csv file
 
     Parameters
     ----------

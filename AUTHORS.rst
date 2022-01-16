@@ -5,7 +5,7 @@ Credits
 Maintainer
 ----------
 
-* Brookhaven National Lab
+* Brookhaven National Laboratory
 
 Contributors
 ------------

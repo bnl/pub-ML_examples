@@ -11,7 +11,7 @@ def load_data(data_dir, uniform=True, seed=1234):
     Parameters
     ----------
     data_dir : Path
-        Directory conatining .hdf5 files
+        Directory containing .hdf5 files
     uniform : bool
         To load data randomly uniform or to split according to data quality
         False will give the failure mode presented in the paper which requires feature engineering
