@@ -113,4 +113,5 @@ Install from github::
 
     $ python3 -m venv pub_env
     $ source pub_env/bin/activate
+    $ python3 -m pip install -r requirements.txt
 
