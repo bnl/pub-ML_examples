@@ -4,6 +4,8 @@ from time import time, sleep
 
 
 class DirectoryAgent:
+    companion: object
+
     def __init__(
         self,
         companion,

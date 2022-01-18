@@ -91,7 +91,7 @@ OS Requirements
 ---------------
 This package has been tested exclusively on Linux operating systems.
 
-- RHEL 8.3
+- Red Hat Enterprise Linux 8
 - Ubuntu 18.04
 - PopOS 20.04
 
@@ -113,4 +113,5 @@ Install from github::
 
     $ python3 -m venv pub_env
     $ source pub_env/bin/activate
+    $ python3 -m pip install -r requirements.txt
 

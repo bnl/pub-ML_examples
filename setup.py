@@ -11,7 +11,7 @@ from subprocess import check_output, CalledProcessError
 min_version = (3, 7)
 if sys.version_info < min_version:
     error = """
-bad-seeds does not support Python {0}.{1}.
+bnl_ml does not support Python {0}.{1}.
 Python {2}.{3} and above is required. Check your Python version like so:
 
 python3 --version
@@ -39,14 +39,14 @@ with open(path.join(here, "requirements.txt")) as requirements_file:
     ]
 
 setup(
-    name="pub-Maffettone_2021_03",
+    name="BNL_ML",
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     description="",
     long_description=readme,
-    author="Brookhaven National Lab",
+    author="Brookhaven National Laboratory",
     author_email="",
-    url="https://github.com/bnl/pub-Maffettone_2021_03",
+    url="https://github.com/bnl/pub-ML_examples",
     python_requires=">={}".format(".".join(str(n) for n in min_version)),
     packages=find_packages(exclude=["docs", "tests"]),
     entry_points={

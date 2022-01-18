@@ -30,6 +30,7 @@ parts/
 sdist/
 var/
 venv/
+pub_env/
 *.egg-info/
 .installed.cfg
 *.egg
