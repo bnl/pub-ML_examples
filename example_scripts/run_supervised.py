@@ -8,9 +8,9 @@ from pathlib import Path
 import numpy as np
 
 
-def featurize_and_normalize(x_train, x_test):
-    fe_train = featurization(x_train)
-    fe_test = featurization(x_test)
+def featurize_and_normalize(X_train, X_test):
+    fe_train = featurization(X_train)
+    fe_test = featurization(X_test)
     train_max: Union[ndarray, int, float, complex] = np.max(fe_train, axis=0)
     fe_train = fe_train / train_max
     fe_test = fe_test / train_max
@@ -40,11 +40,11 @@ def print_results(the_results):
 
 def main():
     # Uniform training
-    x_train, y_train, x_test, y_test = load_data(
+    X_train, y_train, X_test, y_test = load_data(
         Path(__file__).parents[1] / "example_data" / "BMM_startup", uniform=True
     )
-    uniform = train_all_models(x_train, y_train, x_test, y_test)
-    fe_train, fe_test = featurize_and_normalize(x_train, x_test)
+    uniform = train_all_models(X_train, y_train, X_test, y_test)
+    fe_train, fe_test = featurize_and_normalize(X_train, X_test)
     fe_uniform = train_all_models(fe_train, y_train, fe_test, y_test)
     print("Uniform data splits")
     print_results(uniform)
@@ -52,11 +52,11 @@ def main():
     print_results(fe_uniform)
 
     # Non-uniform training
-    x_train, y_train, x_test, y_test = load_data(
+    X_train, y_train, X_test, y_test = load_data(
         Path(__file__).parents[1] / "example_data" / "BMM_startup", uniform=False
     )
-    split = train_all_models(x_train, y_train, x_test, y_test)
-    fe_train, fe_test = featurize_and_normalize(x_train, x_test)
+    split = train_all_models(X_train, y_train, X_test, y_test)
+    fe_train, fe_test = featurize_and_normalize(X_train, X_test)
     fe_split = train_all_models(fe_train, y_train, fe_test, y_test)
 
     print("\nNon-uniform data splits")
