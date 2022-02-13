@@ -92,7 +92,7 @@ This package has been tested exclusively on Linux operating systems.
 
 Python dependencies
 -------------------
-The list of required python packages is contained in the `requirements.txt <requirements.txt>` file in this repository.
+The list of required python packages is contained in the `requirements.txt <requirements.txt>`_ file in this repository.  Some of the examples are provided as Jupyter Notebooks.
 
 Getting Started
 ===============
