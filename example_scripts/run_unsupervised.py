@@ -1,5 +1,5 @@
-from bnl_ml.unsupervised.agent import NMFCompanion
-from bnl_ml.utils.filesystem import ObservationalDirectoryAgent
+from bnl_ml_examples.unsupervised.agent import NMFCompanion
+from bnl_ml_examples.utils.filesystem import ObservationalDirectoryAgent
 from pathlib import Path
 import numpy as np
 

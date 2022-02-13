@@ -11,7 +11,7 @@ from subprocess import check_output, CalledProcessError
 min_version = (3, 7)
 if sys.version_info < min_version:
     error = """
-bnl_ml does not support Python {0}.{1}.
+bnl_ml_examples does not support Python {0}.{1}.
 Python {2}.{3} and above is required. Check your Python version like so:
 
 python3 --version
@@ -39,7 +39,7 @@ with open(path.join(here, "requirements.txt")) as requirements_file:
     ]
 
 setup(
-    name="BNL_ML",
+    name="bnl_ml_examples",
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     description="",
@@ -56,7 +56,7 @@ setup(
     },
     include_package_data=True,
     package_data={
-        "bnl_ml": [
+        "bnl_ml_examples": [
             # When adding files here, remember to update MANIFEST.in as well,
             # or else they will not be included in the distribution on PyPI!
             # 'path/to/data_file',
