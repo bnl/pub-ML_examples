@@ -38,7 +38,7 @@ The agent loads and stores the model and/or necessary data, and has at minimum t
 
 Unsupervised learning (Non-negative matrix factorization)
 *********************************************************
-The `NMF companion agent <bnl_ml/unsupervised/agent.py>`_ keeps a constant cache of data to perform the reduction on.
+The `NMF companion agent <bnl_ml_examples/unsupervised/agent.py>`_ keeps a constant cache of data to perform the reduction on.
 We treat these data as *dependent* variables, with *independent* variables coming fom the experiment.
 In the case study presented, the independent variables are temperature measurements, and the dependent variables are the 1-d spectra.
 Each call to ``report`` updates the decomposition using the full dataset, and updates the plots in the visualization.
