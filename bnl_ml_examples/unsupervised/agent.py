@@ -1,7 +1,7 @@
-from bnl_ml.unsupervised.nmf import decomposition
-from bnl_ml.utils.transforms import default_transform_factory
-from bnl_ml.utils.plotting import independent_waterfall, refresh_figure
-from bnl_ml.utils.maths import min_max_normalize
+from bnl_ml_examples.unsupervised.nmf import decomposition
+from bnl_ml_examples.utils.transforms import default_transform_factory
+from bnl_ml_examples.utils.plotting import independent_waterfall, refresh_figure
+from bnl_ml_examples.utils.maths import min_max_normalize
 import numpy as np
 from matplotlib.pyplot import figure
 import matplotlib as mpl
