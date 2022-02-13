@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import pandas as pd
-from bnl_ml.anomaly.extract_features import get_features_single_datum
+from bnl_ml_examples.anomaly.extract_features import get_features_single_datum
 from pathlib import Path
 
 # import random
