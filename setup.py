@@ -39,7 +39,7 @@ with open(path.join(here, "requirements.txt")) as requirements_file:
     ]
 
 setup(
-    name="BNL_ML_EXAMPLES",
+    name="bnl_ml_examples",
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     description="",
