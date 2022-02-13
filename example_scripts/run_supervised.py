@@ -2,8 +2,8 @@ from typing import Union
 
 from numpy import ndarray
 
-from bnl_ml.supervised.data import load_data, featurization
-from bnl_ml.supervised.training import train_all_models
+from bnl_ml_examples.supervised.data import load_data, featurization
+from bnl_ml_examples.supervised.training import train_all_models
 from pathlib import Path
 import numpy as np
 

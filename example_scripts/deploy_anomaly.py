@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 import os.path
-from bnl_ml.anomaly.extract_features import get_features_single_datum
+from bnl_ml_examples.anomaly.extract_features import get_features_single_datum
 
 
 class AnomalyAgent:
