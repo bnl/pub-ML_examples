@@ -79,11 +79,6 @@ where a wrapper agent does pointwise evaluation on UIDs of a document stream, us
 System Requirements
 ===================
 
-
-Hardware Requirements
-*********************
-
-
 Software Requirements
 *********************
 
@@ -97,17 +92,13 @@ This package has been tested exclusively on Linux operating systems.
 
 Python dependencies
 -------------------
-- numpy
-- matplotlib
-- scikit-learn
-- ipython
+The list of required python packages is contained in the `requirements.txt <requirements.txt>` file in this repository.
 
 Getting Started
 ===============
 
 Installation guide
 ******************
-
 
 Install from github::
 
