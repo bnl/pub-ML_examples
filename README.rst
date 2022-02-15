@@ -97,12 +97,28 @@ The list of required python packages is contained in the `requirements.txt <requ
 Getting Started
 ===============
 
-Installation guide
-******************
+Standard Installation with pip
+******************************
 
-Install from github::
+Firstly, it is recommended to create a fresh software environment using conda, venv, or similar.  
 
-    $ python3 -m venv pub_env
-    $ source pub_env/bin/activate
+with venv...
+
+    $ python3 -m venv bnl-ml-examples
+    $ source bnl-ml-examples/bin/activate
+
+or with conda...
+
+    $ conda create -n bnl-ml-examples python pip
+    $ conda activate bnl-ml-examples
+
+Install the requirements from PyPI using pip.
+
     $ python3 -m pip install -r requirements.txt
 
+Get the code and install from this repository:
+
+    $ git clone https://github.com/BNL/pub-ML_examples/
+    $ cd pub-ML_examples
+    $ pip install -e .
+    
