@@ -102,21 +102,21 @@ Standard Installation with pip
 
 Firstly, it is recommended to create a fresh software environment using conda, venv, or similar.  
 
-with venv...
+with venv...::
 
     $ python3 -m venv bnl-ml-examples
     $ source bnl-ml-examples/bin/activate
 
-or with conda...
+or with conda...::
 
     $ conda create -n bnl-ml-examples python pip
     $ conda activate bnl-ml-examples
 
-Install the requirements from PyPI using pip.
+Install the requirements from PyPI using pip::
 
     $ python3 -m pip install -r requirements.txt
 
-Get the code and install from this repository:
+Get the code and install from this repository::
 
     $ git clone https://github.com/BNL/pub-ML_examples/
     $ cd pub-ML_examples
