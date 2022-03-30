@@ -29,7 +29,7 @@ class AnomalyAgent:
         ----------
         uid: str
             uid of experimental time series
-        y: array
+        y: dictionary
             Relevant detector data to investigate
         """
 
