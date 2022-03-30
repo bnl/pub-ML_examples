@@ -122,7 +122,10 @@ def get_features_single_datum(d):
     features = {}
 
     features["roi"] = d["roi_name"]
-    features["target"] = d["classification_label"]
+    if 'classification_label' in d.keys():
+        features["target"] = d["classification_label"]
+    else:
+        features["target"] = 'unknown'
 
     for key in d.keys():
 
