@@ -53,9 +53,9 @@ and mirrored in the `corresponding notebook <example_scripts/run_unsupervised.ip
 
 Anomaly detection
 *****************
-The model attributes a new observation to either normal or anomalous time series by comparing it to a large courpus of data collected at the beamline over an extended period of time. The development and updating of the model is done offline. Due to the nature of exparimental measurements, anomalous observatons may constitute a sizable portion of data withing a single collection period. Thus, a labeling of the data is required prior to model training. Once the model is trained it is saved as a binary file and loaded each time when ``AnomalyAgent`` is initialized.
+The model attributes a new observation to either normal or anomalous time series by comparing it to a large courpus of data collected at the beamline over an extended period of time. The development and updating of the model is done offline. Due to the nature of experimental measurements, anomalous observations may constitute a sizable portion of data within a single collection period. Thus, a labeling of the data is required prior to model training. Once the model is trained it is saved as a binary file and loaded each time when ``AnomalyAgent`` is initialized.
 
-A set of features devired from the original raw data, allowing the model to process time series of arbitary length.
+A set of features derived from the original raw data, allowing the model to process time series of arbitary length.
 
 The training can be found at `run_anomaly.py <example_scripts/run_anomaly.py>`_ with example deployment
 infrastructure at `deploy_anomaly.py <example_scripts/deploy_anomaly.py>`_.
