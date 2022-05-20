@@ -84,11 +84,17 @@ Software Requirements
 
 OS Requirements
 ---------------
-This package has been tested exclusively on Linux operating systems.
+This package has been tested on Linux operating systems:
 
 - Red Hat Enterprise Linux 8
 - Ubuntu 18.04
 - PopOS 20.04
+
+And on macOS operating system:
+
+- macOS Monterey 12.3.1
+
+Results for the macOS system with the same random seeds are different than those obtained with Linux systems. The results reported in the paper are obtained on Linux systems.
 
 Python dependencies
 -------------------
