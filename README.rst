@@ -57,7 +57,7 @@ The model attributes a new observation to either normal or anomalous time series
 
 A set of features derived from the original raw data, allowing the model to process time series of arbitary length.
 
-The training can be found at `run_anomaly.py <example_scripts/run_anomaly.py>`_ with example deployment
+The training can be found at `run_anomaly_detection.ipynb <example_scripts/_detection.ipynb>`_ with example deployment
 infrastructure at `deploy_anomaly.py <example_scripts/deploy_anomaly.py>`_.
 
 Supervised learning (Failure Classification)
